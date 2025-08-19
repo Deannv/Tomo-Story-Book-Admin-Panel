@@ -1,0 +1,92 @@
+<?php
+
+namespace App\Filament\Resources\Stories\Schemas;
+
+use App\Enums\Interaction;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
+
+class StoryForm
+{
+    public static function configure(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                TextInput::make('title'),
+                Textarea::make('description')
+                    ->autosize(),
+                TextInput::make('read_length_minute')
+                    ->numeric(),
+                Select::make('tags')
+                    ->multiple()
+                    ->relationship(
+                        name: 'tags',
+                        titleAttribute: 'name',
+                    )
+                    ->createOptionForm([
+                        TextInput::make('name'),
+                    ])
+                    ->preload()
+                    ->searchable(),
+                FileUpload::make('cover_image')
+                    ->directory('story_images')
+                    ->image()
+                    ->imageEditor()
+                    ->imageEditorAspectRatios([
+                        null,
+                        '16:9',
+                        '4:3',
+                        '1:1',
+                    ])
+                    ->columnSpan(2),
+                Section::make('Scenes & Questions')
+                    ->schema([
+                        Repeater::make('scenes')
+                            ->relationship('scenes')
+                            ->schema([
+                                TextInput::make('hint')
+                                    ->placeholder('Make sure to keep it compact.'),
+                                FileUpload::make('image')
+                                    ->image()
+                                    ->directory('stories/scenes')
+                                    ->imageEditor()
+                                    ->imageEditorAspectRatios([
+                                        null,
+                                        '16:9',
+                                        '4:3',
+                                        '1:1',
+                                    ]),
+                                RichEditor::make('content')
+                                    ->required(),
+                                Select::make('interaction')
+                                    ->options(Interaction::class),
+                                TextInput::make('interaction_hint')
+                                    ->requiredIf('interaction', ['talk_back', 'soundboard'])
+
+                            ])
+                            ->orderColumn('order')
+                            ->reorderableWithButtons()
+                            ->collapsible()
+                            ->addActionLabel('Add Scene'),
+                        Repeater::make('storyValues')
+                            ->label('Comprehensive Questions')
+                            ->relationship('storyValues')
+                            ->schema([
+                                TextInput::make('question'),
+                                TextInput::make('parent_tip')
+                                    ->placeholder('Make sure to keep it compact.'),
+                            ])
+                            ->collapsible()
+                            ->addActionLabel('Add Value'),
+                    ])
+                    ->columns(2)
+                    ->columnSpan(2),
+            ]);
+    }
+}
