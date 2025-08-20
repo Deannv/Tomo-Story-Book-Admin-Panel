@@ -23,6 +23,7 @@ return new class extends Migration
                 Interaction::TalkBack->value,
                 Interaction::Soundboard->value,
             ])->nullable();
+            $table->string('soundboard')->nullable();
             $table->integer('order')->default(0);
             $table->timestamps();
         });

@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('stories', function (Blueprint $table) {
+        Schema::create('comprehensive_questions', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('description');
-            $table->string('cover_image');
-            $table->string('theme_sound');
-            $table->double('read_length_minute')->default(0);
+            $table->foreignId('story_id')->constrained('stories')->cascadeOnDelete();
+            $table->string('question');
+            $table->string('parent_tip');
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('stories');
+        Schema::dropIfExists('comprehensive_questions');
     }
 };

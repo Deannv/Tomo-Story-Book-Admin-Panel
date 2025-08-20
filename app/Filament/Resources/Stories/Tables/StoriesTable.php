@@ -15,10 +15,14 @@ class StoriesTable
     {
         return $table
             ->columns([
-                ImageColumn::make('cover_image'),
+                ImageColumn::make('cover_image')
+                    ->disk('public')
+                    ->visibility('public'),
                 TextColumn::make('title'),
                 TextColumn::make('read_length_minute')
                     ->color('primary'),
+                TextColumn::make('tags.name')
+                    ->badge(),
             ])
             ->filters([
                 //

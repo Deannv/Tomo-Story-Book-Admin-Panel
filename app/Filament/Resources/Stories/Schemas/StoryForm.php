@@ -35,6 +35,8 @@ class StoryForm
                     ->preload()
                     ->searchable(),
                 FileUpload::make('cover_image')
+                    ->disk('public')
+                    ->visibility('public')
                     ->directory('story_images')
                     ->image()
                     ->imageEditor()
@@ -43,9 +45,38 @@ class StoryForm
                         '16:9',
                         '4:3',
                         '1:1',
-                    ])
-                    ->columnSpan(2),
-                Section::make('Scenes & Questions')
+                    ]),
+                FileUpload::make('theme_sound')
+                    ->disk('public')
+                    ->visibility('public')
+                    ->directory('story_sounds'),
+                Section::make('Story Values')
+                    ->description('What kids will learn from this story?')
+                    ->columns(2)
+                    ->columnSpan(2)
+                    ->schema([
+                        Repeater::make('storyValues')
+                            ->label('Story Values')
+                            ->relationship('storyValues')
+                            ->schema([
+                                TextInput::make('description')
+                                    ->placeholder('Make sure to keep it compact.'),
+                            ])
+                            ->collapsible()
+                            ->addActionLabel('Add Value'),
+                        Repeater::make('comprehensiveQuestions')
+                            ->label('Comprehensive Questions')
+                            ->relationship('comprehensiveQuestions')
+                            ->schema([
+                                TextInput::make('question'),
+                                TextInput::make('parent_tip')
+                                    ->placeholder('Make sure to keep it compact.'),
+                            ])
+                            ->collapsible()
+                            ->addActionLabel('Add Question'),
+                    ]),
+                Section::make('Scenes')
+                    ->description('Scenes (Card) for the story, reorderable.')
                     ->schema([
                         Repeater::make('scenes')
                             ->relationship('scenes')
@@ -54,6 +85,8 @@ class StoryForm
                                     ->placeholder('Make sure to keep it compact.'),
                                 FileUpload::make('image')
                                     ->image()
+                                    ->disk('public')
+                                    ->visibility('public')
                                     ->directory('stories/scenes')
                                     ->imageEditor()
                                     ->imageEditorAspectRatios([
@@ -66,26 +99,19 @@ class StoryForm
                                     ->required(),
                                 Select::make('interaction')
                                     ->options(Interaction::class),
+                                FileUpload::make('soundboard')
+                                    ->disk('public')
+                                    ->visibility('public')
+                                    ->directory('stories/scenes/soundboards')
+                                    ->requiredIf('interaction', 'soundboard'),
                                 TextInput::make('interaction_hint')
-                                    ->requiredIf('interaction', ['talk_back', 'soundboard'])
-
+                                    ->requiredIf('interaction', ['talk_back', 'soundboard']),
                             ])
                             ->orderColumn('order')
                             ->reorderableWithButtons()
                             ->collapsible()
                             ->addActionLabel('Add Scene'),
-                        Repeater::make('storyValues')
-                            ->label('Comprehensive Questions')
-                            ->relationship('storyValues')
-                            ->schema([
-                                TextInput::make('question'),
-                                TextInput::make('parent_tip')
-                                    ->placeholder('Make sure to keep it compact.'),
-                            ])
-                            ->collapsible()
-                            ->addActionLabel('Add Value'),
                     ])
-                    ->columns(2)
                     ->columnSpan(2),
             ]);
     }

@@ -24,4 +24,9 @@ class Story extends Model
     {
         return $this->hasMany(Scene::class);
     }
+
+    public function comprehensiveQuestions(): HasMany
+    {
+        return $this->hasMany(ComprehensiveQuestion::class);
+    }
 }

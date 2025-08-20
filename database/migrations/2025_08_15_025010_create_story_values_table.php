@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('story_values', function (Blueprint $table) {
             $table->id();
             $table->foreignId('story_id')->constrained('stories')->cascadeOnDelete();
-            $table->text('question');
-            $table->string('parent_tip');
+            $table->string('description');
             $table->timestamps();
         });
     }
