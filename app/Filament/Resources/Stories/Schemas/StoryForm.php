@@ -18,12 +18,16 @@ class StoryForm
     {
         return $schema
             ->components([
-                TextInput::make('title'),
+                TextInput::make('title')
+                    ->required(),
                 Textarea::make('description')
+                    ->required()
                     ->autosize(),
                 TextInput::make('read_length_minute')
+                    ->required()
                     ->numeric(),
                 Select::make('tags')
+                    ->required()
                     ->multiple()
                     ->relationship(
                         name: 'tags',
@@ -45,11 +49,13 @@ class StoryForm
                         '16:9',
                         '4:3',
                         '1:1',
-                    ]),
+                    ])
+                    ->required(),
                 FileUpload::make('theme_sound')
                     ->disk('public')
                     ->visibility('public')
-                    ->directory('story_sounds'),
+                    ->directory('story_sounds')
+                    ->required(),
                 Section::make('Story Values')
                     ->description('What kids will learn from this story?')
                     ->columns(2)
@@ -63,7 +69,8 @@ class StoryForm
                                     ->placeholder('Make sure to keep it compact.'),
                             ])
                             ->collapsible()
-                            ->addActionLabel('Add Value'),
+                            ->addActionLabel('Add Value')
+                            ->required(),
                         Repeater::make('comprehensiveQuestions')
                             ->label('Comprehensive Questions')
                             ->relationship('comprehensiveQuestions')
@@ -73,7 +80,8 @@ class StoryForm
                                     ->placeholder('Make sure to keep it compact.'),
                             ])
                             ->collapsible()
-                            ->addActionLabel('Add Question'),
+                            ->addActionLabel('Add Question')
+                            ->required(),
                     ]),
                 Section::make('Scenes')
                     ->description('Scenes (Card) for the story, reorderable.')
