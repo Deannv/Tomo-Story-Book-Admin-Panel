@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Story;
+use App\Models\Feedback;
 use Illuminate\Http\Request;
 
-class StoryController extends Controller
+class FeedbackController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return response()->json(Story::with(['tags'])->get(), 200);
+        //
     }
 
     /**
@@ -21,7 +21,17 @@ class StoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'story_id' => 'required|exists:stories,id',
+            'effectiveness' => 'required|integer|max:5|min:1',
+            'comments' => 'nullable',
+            'child_age' => 'required|integer',
+            'child_gender' => 'string',
+        ]);
+
+        Feedback::create($validatedData);
+
+        return response()->json(['status' => 'success', 'code' => 200], 200);
     }
 
     /**
@@ -29,12 +39,7 @@ class StoryController extends Controller
      */
     public function show(string $id)
     {
-        $story = Story::with(['tags', 'storyValues', 'scenes' => function ($query) {
-            $query->withCasts([
-                'order' => 'integer',
-            ]);
-        }, 'comprehensiveQuestions'])->findOrFail($id);
-        return response()->json($story);
+        //
     }
 
     /**

@@ -25,6 +25,7 @@ return new class extends Migration
             ])->nullable();
             $table->string('soundboard')->nullable();
             $table->integer('order')->default(0);
+            $table->string('narration_url')->nullable();
             $table->timestamps();
         });
     }

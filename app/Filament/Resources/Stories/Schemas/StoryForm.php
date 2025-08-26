@@ -105,6 +105,10 @@ class StoryForm
                                     ]),
                                 RichEditor::make('content')
                                     ->required(),
+                                FileUpload::make('narration')
+                                    ->disk('public')
+                                    ->visibility('public')
+                                    ->directory('stories/scenes/narrations'),
                                 Select::make('interaction')
                                     ->options(Interaction::class),
                                 FileUpload::make('soundboard')
