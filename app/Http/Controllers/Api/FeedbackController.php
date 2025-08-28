@@ -23,9 +23,9 @@ class FeedbackController extends Controller
     {
         $validatedData = $request->validate([
             'story_id' => 'required|exists:stories,id',
-            'effectiveness' => 'required|integer|max:5|min:1',
+            'effectiveness' => 'required|max:5|min:1',
             'comments' => 'nullable',
-            'child_age' => 'required|integer',
+            'child_age' => 'required',
             'child_gender' => 'string',
         ]);
 
