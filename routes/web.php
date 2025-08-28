@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\StoryController;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -11,4 +12,5 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/', '/admin');
 
 Route::apiResource('api/stories', StoryController::class)->except(['store', 'create', 'update', 'edit', 'delete']);
-Route::apiResource('api/feedback', FeedbackController::class)->except(['create', 'update', 'edit', 'delete', 'index']);
+Route::apiResource('api/feedback', FeedbackController::class)->except(['create', 'update', 'edit', 'delete', 'index'])
+    ->withoutMiddleware([VerifyCsrfToken::class]);;
