@@ -25,6 +25,7 @@ class FeedbackTable
                     ->sortable(),
                 TextColumn::make('child_gender')
                     ->searchable(),
+                TextColumn::make('comments'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
